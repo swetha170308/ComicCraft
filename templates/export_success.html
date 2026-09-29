@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comic Exported Successfully! - ComicCraft</title>
+  <meta name="description" content="Your AI comic has been exported to PDF successfully.">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="hero-backdrop"></div>
+
+  <div class="container">
+    <header class="comic-header" style="margin-bottom: 24px;">
+      <div class="brand-badge">🎉 Export Complete</div>
+      <h1 class="comic-title">COMIC EXPORTED <span class="glow">SUCCESSFULLY!</span></h1>
+    </header>
+
+    <main>
+      <section class="comic-card success-card">
+        <div class="success-icon">🎨 🚀 📖</div>
+        
+        <h2 style="font-family: 'Bangers', cursive; font-size: 2.2rem; color: var(--primary-yellow); margin-bottom: 12px; letter-spacing: 1px;">
+          Your Masterpiece is Ready!
+        </h2>
+        
+        <p style="color: #cbd5e1; font-size: 1.15rem; max-width: 540px; margin: 0 auto 28px;">
+          Your AI-powered comic has been successfully created and saved as a print-ready PDF with illustrations, dialogues, and full narrative formatting.
+        </p>
+
+        {% if filename %}
+        <div style="background: rgba(15, 23, 42, 0.7); border: 2px dashed #475569; border-radius: 12px; padding: 18px; margin-bottom: 30px; display: inline-flex; align-items: center; gap: 12px; max-width: 90%;">
+          <span style="font-size: 1.8rem;">📄</span>
+          <div style="text-align: left;">
+            <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">Exported File:</div>
+            <div style="color: var(--primary-yellow); font-family: monospace; font-size: 0.9rem;">{{ filename }}</div>
+          </div>
+          <a href="/download/{{ filename }}" class="btn-comic btn-secondary" style="font-size: 1rem; padding: 8px 16px; margin-left: 10px;">
+            Re-download
+          </a>
+        </div>
+        {% endif %}
+
+        <div style="display: flex; justify-content: center; gap: 16px; flex-wrap: wrap;">
+          <a href="/" class="btn-comic btn-primary" style="font-size: 1.5rem; padding: 16px 36px;">
+            ✨ Go Create Another Comic
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="comic-footer">
+      <p>ComicCraft • Built with FastAPI, Google Gemini Models & Stable Diffusion</p>
+    </footer>
+  </div>
+</body>
+</html>

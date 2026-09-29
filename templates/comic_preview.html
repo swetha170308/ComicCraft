@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Comic Preview - ComicCraft</title>
+  <meta name="description" content="View your AI-generated 5-panel comic story and illustrations.">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="hero-backdrop"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="comic-header" style="margin-bottom: 20px;">
+      <div class="brand-badge">✨ Comic Generated Successfully</div>
+      <h1 class="comic-title">YOUR COMIC <span class="glow">PREVIEW</span></h1>
+      <p class="comic-subtitle">Review your 5-panel story arc, vibrant scene illustrations, and dramatic character dialogues below.</p>
+    </header>
+
+    <!-- Story Meta Summary Pills -->
+    <div class="meta-summary">
+      <div class="meta-pill"><strong>Hero:</strong> {{ character_name }}</div>
+      <div class="meta-pill"><strong>Setting:</strong> {{ setting }}</div>
+      <div class="meta-pill"><strong>Tone:</strong> {{ tone }}</div>
+      <div class="meta-pill"><strong>Style:</strong> {{ style }}</div>
+      <div class="meta-pill" style="flex: 1 1 300px;"><strong>Prompt:</strong> "{{ prompt }}"</div>
+    </div>
+
+    <!-- Action Bar (Top) -->
+    <div class="action-bar">
+      <div>
+        <h3 style="font-family: 'Bangers', cursive; font-size: 1.6rem; color: #fff;">Story Strip Complete</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">Ready to save, print, or share your high-resolution comic.</p>
+      </div>
+      <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+        <a href="/" class="btn-comic btn-secondary">
+          ↩ New Story
+        </a>
+        <button type="button" id="btn-download-pdf-top" class="btn-comic btn-primary" onclick="handlePdfDownload('{{ pdf_path }}')">
+          📥 Download Your Comic as PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Panels Container -->
+    <main class="panels-container">
+      {% for panel in layout %}
+      <article class="panel-card" id="panel-{{ panel.panel }}">
+        <div class="panel-header">
+          <div class="panel-title">{{ panel.title }}</div>
+          <div class="panel-badge">PANEL #{{ panel.panel }}</div>
+        </div>
+
+        <div class="panel-body-grid">
+          <!-- Illustration Frame -->
+          <div class="panel-image-wrapper">
+            <img src="/{{ panel.image_path }}" alt="{{ panel.title }}" loading="lazy">
+          </div>
+
+          <!-- Narrative and Dialogues -->
+          <div class="panel-content">
+            <!-- Scene Description in italics -->
+            {% if panel.scene_description %}
+            <div class="scene-description-box">
+              {{ panel.scene_description }}
+            </div>
+            {% endif %}
+
+            <!-- Narrative / Dialogues Section -->
+            <div class="narrative-block">
+              {% if panel.caption %}
+              <div class="comic-box caption">
+                <strong>CAPTION:</strong> {{ panel.caption }}
+              </div>
+              {% endif %}
+
+              {% if panel.narration %}
+              <div class="comic-box narration">
+                <strong>NARRATION:</strong> {{ panel.narration }}
+              </div>
+              {% endif %}
+
+              {% if panel.dialogue %}
+              <div class="speech-bubble">
+                💬 {{ panel.dialogue }}
+              </div>
+              {% endif %}
+
+              {% if not panel.caption and not panel.narration and panel.text %}
+              <div class="comic-box narration">
+                <div style="white-space: pre-line;">{{ panel.text }}</div>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- Image Prompt Reference Box -->
+            {% if panel.image_prompt %}
+            <div class="prompt-reference-box">
+              <strong>IMAGE PROMPT REFERENCE:</strong><br>
+              {{ panel.image_prompt }}
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </main>
+
+    <!-- Action Bar (Bottom) -->
+    <div class="action-bar" style="margin-top: 36px;">
+      <div>
+        <h3 style="font-family: 'Bangers', cursive; font-size: 1.6rem; color: #fff;">Loved this story?</h3>
+        <p style="color: var(--text-muted); font-size: 0.85rem;">Download the full PDF or create another adventure with fresh tones and art styles.</p>
+      </div>
+      <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+        <a href="/" class="btn-comic btn-secondary">
+          ↩ Create Another Comic
+        </a>
+        <button type="button" id="btn-download-pdf-bottom" class="btn-comic btn-primary" onclick="handlePdfDownload('{{ pdf_path }}')">
+          📥 Download Your Comic as PDF
+        </button>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="comic-footer">
+      <p>ComicCraft • AI Comic Story Creator • Generated with Google Gemini Models</p>
+    </footer>
+  </div>
+
+  <script>
+    function handlePdfDownload(pdfUrl) {
+      if (!pdfUrl) return;
+      // Extract filename
+      const filename = pdfUrl.split('/').pop();
+      // Direct download link
+      const link = document.createElement('a');
+      link.href = '/download/' + filename;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      // Auto redirect to export-success page as documented in project flow
+      setTimeout(() => {
+        window.location.href = '/export-success?pdf_path=' + encodeURIComponent(pdfUrl);
+      }, 700);
+    }
+  </script>
+</body>
+</html>

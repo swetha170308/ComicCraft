@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ComicCraft - AI Comic Story Creator using Gemini Models</title>
+  <meta name="description" content="Create personalized 5-panel comic book stories and illustrations with Google Gemini Flash, Gemini Pro, and Stable Diffusion.">
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="hero-backdrop"></div>
+
+  <div class="container">
+    <!-- Header -->
+    <header class="comic-header">
+      <div class="brand-badge">
+        <span>⚡ AI Comic Studio</span>
+        <span>•</span>
+        <span>Gemini 1.5 & Stable Diffusion</span>
+      </div>
+      <h1 class="comic-title">COMIC<span class="glow">CRAFT</span></h1>
+      <p class="comic-subtitle">Transform your wildest ideas into vivid, panel-by-panel comic adventures complete with cinematic dialogue, rich narration, and professional PDF export.</p>
+    </header>
+
+    <!-- Main Creation Form Card -->
+    <main>
+      <section class="comic-card">
+        <!-- Quick Story Idea Presets -->
+        <div class="preset-bar">
+          <label>💡 Quick Story Presets (Click to Auto-fill)</label>
+          <div class="preset-chips">
+            <button type="button" class="preset-chip" data-preset="fox">🦊 The Brave Fox (Forest / Dramatic)</button>
+            <button type="button" class="preset-chip" data-preset="cyberpunk">🌆 Cyberpunk Detective (Megacity / Action)</button>
+            <button type="button" class="preset-chip" data-preset="space">🚀 Cosmic Odyssey (Deep Space / Poetic)</button>
+            <button type="button" class="preset-chip" data-preset="funny">🎩 Wizard's Duck Hat (Magic / Funny)</button>
+          </div>
+        </div>
+
+        {% if error_message %}
+        <div style="background: rgba(239, 68, 68, 0.2); border: 2px solid #ef4444; color: #fca5a5; padding: 14px 18px; border-radius: 10px; margin-bottom: 20px;">
+          <strong>Error:</strong> {{ error_message }}
+        </div>
+        {% endif %}
+
+        <form id="comic-create-form" action="/generate" method="POST">
+          <div class="form-grid">
+            <!-- Story Prompt -->
+            <div class="form-group full-width">
+              <label for="story-prompt" class="comic-label">
+                Story Prompt <span class="req">*</span>
+              </label>
+              <textarea id="story-prompt" name="prompt" class="comic-textarea" required
+                placeholder="Describe your comic story idea (e.g., A brave fox named Free explores an enchanted forest to uncover an ancient glowing relic)...">A brave fox explores an enchanted forest.</textarea>
+            </div>
+
+            <!-- Main Character Name -->
+            <div class="form-group">
+              <label for="character-name" class="comic-label">
+                Main Character Name <span class="req">*</span>
+              </label>
+              <input type="text" id="character-name" name="character_name" class="comic-input" required
+                value="Free" placeholder="Hero or protagonist name">
+            </div>
+
+            <!-- Setting -->
+            <div class="form-group">
+              <label for="setting-input" class="comic-label">
+                Setting <span class="req">*</span>
+              </label>
+              <select id="setting-input" name="setting" class="comic-select">
+                <option value="Forest" selected>Enchanted Forest</option>
+                <option value="School">High School / Academy</option>
+                <option value="Space">Outer Space / Starship</option>
+                <option value="City">Cyberpunk City</option>
+                <option value="Ancient Ruins">Ancient Temple Ruins</option>
+                <option value="Underwater">Sunken Deep Sea Kingdom</option>
+              </select>
+            </div>
+
+            <!-- Story Tone -->
+            <div class="form-group">
+              <label for="story-tone" class="comic-label">
+                Story Tone <span class="req">*</span>
+              </label>
+              <select id="story-tone" name="tone" class="comic-select">
+                <option value="Dramatic" selected>Dramatic</option>
+                <option value="Light-hearted">Light-hearted</option>
+                <option value="Funny">Funny / Humorous</option>
+                <option value="Poetic">Poetic & Mystical</option>
+                <option value="Action-packed">Action-packed</option>
+              </select>
+            </div>
+
+            <!-- Art Style -->
+            <div class="form-group">
+              <label for="art-style" class="comic-label">
+                Art Style <span class="req">*</span>
+              </label>
+              <select id="art-style" name="style" class="comic-select">
+                <option value="Comic Book">Classic Comic Book</option>
+                <option value="Anime">Anime / Manga</option>
+                <option value="Realistic" selected>Realistic</option>
+                <option value="Pixel Art">Pixel Art Retro</option>
+                <option value="Cyberpunk">Cyberpunk Neon</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <div style="text-align: center; margin-top: 10px;">
+            <button type="submit" id="btn-submit-generate" class="btn-comic btn-primary" style="width: 100%; max-width: 440px;">
+              ⚡ GENERATE COMIC STRIP
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Architecture Explainer Bar -->
+      <section style="margin-top: 36px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px;">
+        <div style="background: rgba(18, 24, 38, 0.6); border: 1px solid #1e293b; padding: 18px; border-radius: 12px;">
+          <h3 style="color: var(--primary-yellow); font-family: 'Bangers', cursive; font-size: 1.3rem; margin-bottom: 6px;">1. Flash Outline</h3>
+          <p style="font-size: 0.85rem; color: #94a3b8;">Gemini 1.5 Flash crafts a balanced 5-panel narrative arc with scene descriptions & visual prompts.</p>
+        </div>
+        <div style="background: rgba(18, 24, 38, 0.6); border: 1px solid #1e293b; padding: 18px; border-radius: 12px;">
+          <h3 style="color: var(--primary-red); font-family: 'Bangers', cursive; font-size: 1.3rem; margin-bottom: 6px;">2. Pro Storyteller</h3>
+          <p style="font-size: 0.85rem; color: #94a3b8;">Gemini 1.5 Pro generates comic narration, character dialogue lines, and ambient caption atmosphere.</p>
+        </div>
+        <div style="background: rgba(18, 24, 38, 0.6); border: 1px solid #1e293b; padding: 18px; border-radius: 12px;">
+          <h3 style="color: var(--primary-cyan); font-family: 'Bangers', cursive; font-size: 1.3rem; margin-bottom: 6px;">3. Panel Inking</h3>
+          <p style="font-size: 0.85rem; color: #94a3b8;">Stable Diffusion & graphic engines render panel-by-panel illustrations matching your chosen style.</p>
+        </div>
+        <div style="background: rgba(18, 24, 38, 0.6); border: 1px solid #1e293b; padding: 18px; border-radius: 12px;">
+          <h3 style="color: #a855f7; font-family: 'Bangers', cursive; font-size: 1.3rem; margin-bottom: 6px;">4. Layout & PDF Export</h3>
+          <p style="font-size: 0.85rem; color: #94a3b8;">Layout builder binds text and visuals, compiling a professional multi-page downloadable PDF.</p>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="comic-footer">
+      <p>ComicCraft • Built with FastAPI, Google Gemini Models, and AI Image Diffusion • SmartBridge Academic Prototype</p>
+    </footer>
+  </div>
+
+  <!-- Animated Loading Overlay -->
+  <div id="loading-overlay" class="loading-overlay">
+    <div class="comic-spinner-card">
+      <div id="comic-boom-text" class="comic-boom">POW!</div>
+      <div class="loading-text">Crafting Your AI Comic...</div>
+      <div id="loading-sub-text" class="loading-sub">Connecting with Gemini Flash for panel outline...</div>
+    </div>
+  </div>
+
+  <script src="/static/js/main.js"></script>
+</body>
+</html>
