@@ -30,6 +30,12 @@ async def home(request: Request):
     return templates.TemplateResponse("index.html", {"request": request})
 
 
+@router.get("/generate")
+async def generate_redirect():
+    """Redirects direct GET visits to the creation homepage."""
+    return RedirectResponse(url="/", status_code=303)
+
+
 @router.post("/generate", response_class=HTMLResponse)
 async def generate_comic(
     request: Request,
